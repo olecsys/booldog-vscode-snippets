@@ -1,0 +1,77 @@
+{
+    "booldog:makefile:docker-skeleton": {
+      "prefix": "booldog:docker:makefile",
+      "body": [
+        "MAKEFILE_PATH := \\$(abspath \\$(lastword $(MAKEFILE_LIST)))",
+        "MAKEFILE_DIR := \\$(patsubst %/,%,\\$(dir \\$(MAKEFILE_PATH)))",
+        "",
+        ".PHONY: help",
+        "",
+        "help: ## This help.",
+        "    @awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z_-]+:.*?## / {printf \"\\033[36m%-30s\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' \\$(MAKEFILE_LIST)",
+        "",
+        ".DEFAULT_GOAL := help",
+        "",
+        "",
+        "",
+        "build: ## Build the container",
+        "    docker build -t \\$(APP_NAME) .",
+        "",
+        "run: ## Run container on port configured in `config.env`",
+        "    docker run -i -t --rm --env-file=\\$(MAKEFILE_DIR)/config.env -p=\\$(PORT):\\$(PORT) --name=\"\\$(APP_NAME)\" \\$(APP_NAME)",
+        "",
+        "up: build run ## Run container on port configured in `config.env` (Alias to run)",
+        "",
+        "stop: ## Stop running containers",
+        "    docker stop \\$(APP_NAME)",
+        "",
+        "rm: stop ## Stop and remove running containers",
+	      "    docker rm \\$(APP_NAME)"
+      ],
+      "description": "Makefile is implementing different Docker commands"
+    },
+    "booldog:makefile:check-path-exists": {
+      "prefix": "booldog:makefile:check-file-exists",
+      "body": [
+        "ifneq (\"\\$(wildcard \\$(${1:VARNAME}))\",\"\")",
+        "    FILE_EXISTS = 1",
+        "else",
+        "    FILE_EXISTS = 0",
+        "endif"
+      ],
+      "description": "Check path existing"
+    },
+    "booldog:makefile:check-variable-exists": {
+      "prefix": "booldog:makefile:check-variable-exists",
+      "body": [
+        "ifndef ${1:VARNAME}",
+        "${2:\\$(info variable does not exist)}",
+        "endif"
+      ],
+      "description": "Check variable existing"
+    },    
+    "booldog:makefile:path": {
+      "prefix": "booldog:makefile:path",
+      "body": [
+        "MAKEFILE_PATH := \\$(abspath \\$(lastword \\$(MAKEFILE_LIST)))",
+        "MAKEFILE_DIR := \\$(patsubst %/,%,\\$(dir \\$(MAKEFILE_PATH)))"
+      ],
+      "description": "Makefile path variable"
+    },
+    "booldog:makefile:echo": {
+      "prefix": "booldog:makefile:path",
+      "body": [
+        "$(info ${1:MESSAGE})"
+      ],
+      "description": "Print message on the terminal"
+    },
+    "booldog:makefile:changeable-variable": {
+      "prefix": "booldog:makefile:changeable-variable",
+      "body": [
+        "# You can change the default value of ${1:VARNAME} with `make ${1:VARNAME}=\"new-value\"`",
+        "${1:VARNAME} ?= ${2:VARVALUE}"
+      ],
+      "description": "Variable that could be changed via `make` execution"
+    }
+    
+}
