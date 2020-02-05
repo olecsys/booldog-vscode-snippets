@@ -1,8 +1,9 @@
 {
-  "booldog:shell:skeleton": {
-    "prefix": "booldog:shell:skeleton",
+  "booldog:skeleton": {
+    "scope":"shellscript",
+    "prefix": "booldog:skeleton",
     "body": [
-      "#!/bin/bash",
+      "#!/usr/bin/env bash",
       "function read_options() {",
       "  g_opt_ind=0",
       "  while getopts \"yYnN\" opt; do",
@@ -19,46 +20,65 @@
       "  local script_dir=\"`pwd`/`basename \"\\$0\"`\"",
       "  script_dir=`dirname \"\\$script_dir\"`",
       "  cd \"\\$old_dir\"",
-      "  read_options $@",
       "",
-      "  local red='\\e[0;31m'",
-      "  local green='\\e[0;32m'",
-      "  local nocolor='\\e[0m'",
+      "  local red='\\\\e[0;31m'",
+      "  local green='\\\\e[0;32m'",
+      "  local nocolor='\\\\e[0m'",
+      "  local redbold='\\\\e[1;31m'",
+      "  local greenbold='\\\\e[1;32m'",
+      "  local nocolorbold='\\\\e[1m'",
       "",
-      "  __funcerror=",
-      "  __funccanceled=0",
-      "  __funcfailed=0",
+      "  local __cmd_args=( \"\\$@\" )",
       "",
-      "  if [ \\$__funcfailed -eq 0 ] && [ \\$__funccanceled -eq 0 ]; then",
-      "    ${2:echo \"Some action\"} || __funcfailed=1",
-      "  fi",
+      "  read_options \\$@  ",
       "",
-      "  if [ \\$__funccanceled -eq 1 ]; then",
-      "    echo -e \"\\${red}${1:Script process name} is canceled\\${nocolor}\" 1>&2",
-      "  else",
-      "    if [ \\$__funcfailed -eq 0 ]; then",
-      "      echo -e \"\\${green}${1:Script process name} is succeeded\\${nocolor}\"",
-      "    else",
-      "      if ! [ -z \"\\$__funcerror\" ]; then",
-      "        echo -e \"\\${red}\\$__funcerror\\${nocolor}\" 1>&2",
-      "      else",
-      "        echo -e \"\\${red}${1:Script process name} is failed\\${nocolor}\" 1>&2",
-      "      fi",
-      "    fi",
-      "  fi",
+      "  local __funcerror=     # set `__funcerror` variable with custom error message ",
+      "  local __funccanceled=0 # if you want to cancel script set to `1`",
+      "  local __funcresult=1   # set `__funcresult` variable with script result",
+      "",
+      "  while true",
+      "  do",
+      "    # add main logic here ",
+      "",
+      "    __funcresult=0",
+      "    break",
+      "  done  ",
+      "  ",
       "  cd \"\\$old_dir\"",
+      "",
+      "  while true",
+      "  do",
+      "    [ \\$__funccanceled -eq 1 ] \\\\",
+      "        && { echo -e '",
+      "'\\${redbold}'${1:Opera web browser}'\\${red}' ${2:installation} is canceled",
+      "'\\${nocolor} 1>&2 ; break; }",
+      "",
+      "    [ ! -z \"\\$__funcerror\" ] \\\\",
+      "        && { echo -e \"",
+      "\\${red}\\${__funcerror}\\${nocolor}",
+      "\" 1>&2 ; __funcresult=1 ; break; }",
+      "    ",
+      "    [ \\$__funcresult -eq 0 ] \\\\",
+      "        && { echo -e '",
+      "'\\${greenbold}'${1:Opera web browser}'\\${green}' ${2:installation} is succeeded",
+      "'\\${nocolor} ; break; }",
+      "        ",
+      "    echo -e '",
+      "'\\${redbold}'${1:Opera web browser}'\\${red}' ${2:installation} is failed",
+      "'\\${nocolor} 1>&2",
+      "    ",
+      "    break",
+      "  done",
+      "",
+      "  exit \\$__funcresult",
       "}",
-      "main $@",
-      "if [ \\$__funcfailed -eq 0 ]; then",
-      "  exit 0",
-      "else",
-      "  exit 1",
-      "fi"
+      "main \"\\$@\""
     ],
     "description": "Shell file skeleton"
   },
-  "booldog:shell:wait-for-non-empty-function": {
-    "prefix": "booldog:shell:wait-for-non-empty-function",
+  "booldog:wait-for-non-empty-function": {
+    "scope":"shellscript",
+    "prefix": "booldog:wait-for-non-empty-function",
     "body": [
       "function wait_for_non_empty() {",
       "  local question=\\$1",
@@ -73,8 +93,9 @@
     ],
     "description": "Shell function that is waiting for non empty string, variable $__funcresult contains function result"
   },
-  "booldog:shell:script-confirmation-question": {
-    "prefix": "booldog:shell:script-confirmation-question",
+  "booldog:script-confirmation-question": {
+    "scope":"shellscript",
+    "prefix": "booldog:script-confirmation-question",
     "body": [
       "local question=\"Are you sure you want to ${1:execute script}?(Y/n)\"",
       "wait_for_yes_no \"\\$question\" \"${2:Y}\"",
@@ -87,8 +108,9 @@
     ],
     "description": "Confirmation of the script execution"
   },
-  "booldog:shell:wait-for-yes-no-function": {
-    "prefix": "booldog:shell:wait-for-yes-no-function",
+  "booldog:wait-for-yes-no-function": {
+    "scope":"shellscript",
+    "prefix": "booldog:wait-for-yes-no-function",
     "body": [
       "function wait_for_yes_no() {",
       "  local question=\\$1",
@@ -118,15 +140,17 @@
     ],
     "description": "Shell function that is waiting for Yes/No enter, variable $__funcresult contains function result"
   },
-  "booldog:shell:path-get-absolute": {
-    "prefix": "booldog:shell:path-get-absolute",
+  "booldog:path-get-absolute": {
+    "scope":"shellscript",
+    "prefix": "booldog:path-get-absolute",
     "body": [
       "local ${1:VARNAME}_ABS=\\$(realpath \"${1:VARNAME}\")"
     ],
     "description": "Shell expresion to get real absolute path to file/directory"
   },
-  "booldog:shell:escape-path-variable-for-sed": {
-    "prefix": "booldog:shell:escape-path-variable-for-sed",
+  "booldog:escape-path-variable-for-sed": {
+    "scope":"shellscript",
+    "prefix": "booldog:escape-path-variable-for-sed",
     "body": [
       "local ${1:VARNAME}_ESC=\\$(realpath \"\\$${1:VARNAME}\")",
       "local ${1:VARNAME}_ESC=\\$(sed 's/[\\*\\.&]/\\\\\\\\&/g' <<<\"\\$${1:VARNAME}_ESC\")",
@@ -134,8 +158,9 @@
     ],
     "description": "Escape file/directory path variable for `sed` processing"
   },
-  "booldog:shell:if-error-or-action": {
-    "prefix": "booldog:shell:if-error-or-action",
+  "booldog:if-error-or-action": {
+    "scope":"shellscript",
+    "prefix": "booldog:if-error-or-action",
     "body": [
       "if [ \\$__funcfailed -eq 0 ] && [ \\$__funccanceled -eq 0 ]; then",
       "  ${1:echo \"Some action\"} || __funcfailed=1",
@@ -143,45 +168,51 @@
     ],
     "description": "Shell action expression with previous error and cancelation checking"
   },
-  "booldog:shell:action-or-error": {
-    "prefix": "booldog:shell:action-or-error",
+  "booldog:action-or-error": {
+    "scope":"shellscript",
+    "prefix": "booldog:action-or-error",
     "body": [
       "${1:echo \"Some action\"} || __funcfailed=1"
     ],
     "description": "Shell action expression with setting of error if it is occured"
   },
-  "booldog:shell:sed-delete-line": {
-    "prefix": "booldog:shell:sed-delete-line",
+  "booldog:sed-delete-line": {
+    "scope":"shellscript",
+    "prefix": "booldog:sed-delete-line",
     "body": [
       "sed -i \"/${1:^@reboot\\s\\+nohup\\s\\+\\\".*\\/bin\\/reboot.sh\\\"}/d\" \\",
       "  ${2:/tmp/file_to_change}"
     ],
     "description": "Shell sed command that delete line with Regex expression match"
   },
-  "booldog:shell:sed-replace-middle-in-line": {
-    "prefix": "booldog:shell:sed-replace-middle-in-line",
+  "booldog:sed-replace-middle-in-line": {
+    "scope":"shellscript",
+    "prefix": "booldog:sed-replace-middle-in-line",
     "body": [
       "sed \"s/\\(${1:{\\\"version\\\"\\s*:\\s*\\\"}\\)${2:[^\\\"]*}\\(${3:\\\"}}\\)/\\1${4:newvalue}\\2/g\" \\",
       "  ${5:/tmp/file_to_change}"
     ],
     "description": "Shell sed command that delete line with Regex expression match"
   },
-  "booldog:shell:now-date": {
-    "prefix": "booldog:shell:now-date",
+  "booldog:now-date": {
+    "scope":"shellscript",
+    "prefix": "booldog:now-date",
     "body": [
       "local NOW_DATE=$(date +\"%Y-%m-%d\")"
     ],
     "description": "Shell command to get system date"
   },
-  "booldog:shell:redirect-all-to-null": {
-    "prefix": "booldog:shell:redirect-all-to-null",
+  "booldog:redirect-all-to-null": {
+    "scope":"shellscript",
+    "prefix": "booldog:redirect-all-to-null",
     "body": [
       "> /dev/null 2>&1"
     ],
     "description": "Shell expression to redirect all command output to null"
   },
-  "booldog:shell:file-add-lines": {
-    "prefix": "booldog:shell:file-add-lines",
+  "booldog:file-add-lines": {
+    "scope":"shellscript",
+    "prefix": "booldog:file-add-lines",
     "body": [
       "(",
       "tee -a \"${1:/tmp/file_to_change}\" <<EOFBOOLDOG",
@@ -191,8 +222,9 @@
     ],
     "description": "Shell command to add line(s) to file"
   },
-  "booldog:shell:file-clear-all-and-add-lines": {
-    "prefix": "booldog:shell:file-clear-all-and-add-lines",
+  "booldog:file-clear-all-and-add-lines": {
+    "scope":"shellscript",
+    "prefix": "booldog:file-clear-all-and-add-lines",
     "body": [
       "(",
       "tee \"${1:/tmp/file_to_change}\" <<EOFBOOLDOG",
@@ -202,16 +234,18 @@
     ],
     "description": "Shell command to add line(s) to file"
   },
-  "booldog:shell:check-system-user-exists": {
-    "prefix": "booldog:shell:check-system-user-exists",
+  "booldog:check-system-user-exists": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-system-user-exists",
     "body": [
       "local ${2:__user_exists}=1",
       "id -u ${1:USERNAME} || ${2:__user_exists}=0"
     ],
     "description": "Shell command to check system user existence"
   },
-  "booldog:shell:check-file-exists": {
-    "prefix": "booldog:shell:check-file-exists",
+  "booldog:check-file-exists": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-file-exists",
     "body": [
       "if [ -e \"${1:/tmp/file_to_check}\" ]; then",
       "  ${2:echo \"File exists\"}",
@@ -219,15 +253,17 @@
     ],
     "description": "Shell expression to check file existence"
   },
-  "booldog:shell:add-system-user": {
-    "prefix": "booldog:shell:add-system-user",
+  "booldog:add-system-user": {
+    "scope":"shellscript",
+    "prefix": "booldog:add-system-user",
     "body": [
       "useradd -d \"${2:/home/USERHOMEDIR}\" -s /bin/bash -m ${1:USERNAME}"
     ],
     "description": "Shell command to add new system user with home directory"
   },
-  "booldog:shell:sed-replace-line": {
-    "prefix": "booldog:shell:sed-replace-line",
+  "booldog:sed-replace-line": {
+    "scope":"shellscript",
+    "prefix": "booldog:sed-replace-line",
     "body": [
       "sed -i \\",
       "  \"s/${1:^EXEC_DIR=\\\".*\\\".*/EXEC_DIR=\\\"\\$OVERPASS_DIR_ESC\\/bin\\\" # generated by overpass_api.sh}/\" \\",
@@ -235,10 +271,11 @@
     ],
     "description": "Shell sed command that replace line with new string"
   },
-  "booldog:shell:jupyter-config": {
-    "prefix": "booldog:shell:jupyter-config",
+  "booldog:jupyter-config": {
+    "scope":"shellscript",
+    "prefix": "booldog:jupyter-config",
     "body": [
-      "#!/bin/bash",
+      "#!/usr/bin/env bash",
       "function read_options() {",
       "  g_opt_ind=0",
       "  while getopts \"yYnN\" opt; do",
@@ -302,7 +339,7 @@
       "  fi",
       "  cd \"\\$old_dir\"",
       "}",
-      "main \\$@",
+      "main \"\\$@\"",
       "if [ \\$__funcfailed -eq 0 ]; then",
       "  exit 0",
       "else",
@@ -311,10 +348,11 @@
     ],
     "description": "Shell script that uses `config.env` and helps to tune Jupyter Notebook settings"
   },
-  "booldog:shell:create-python-devenv": {
-    "prefix": "booldog:shell:create-python-devenv",
+  "booldog:create-python-devenv": {
+    "scope":"shellscript",
+    "prefix": "booldog:create-python-devenv",
     "body": [
-      "#!/bin/bash",
+      "#!/usr/bin/env bash",
       "function read_options() {",
       "  g_opt_ind=0",
       "  while getopts \"yYnN\" opt; do",
@@ -481,7 +519,7 @@
       "  fi",
       "  cd \"\\$old_dir\"",
       "}",
-      "main \\$@",
+      "main \"\\$@\"",
       "if [ \\$__funcfailed -eq 0 ]; then",
       "  exit 0",
       "else",
@@ -490,11 +528,700 @@
     ],
     "description": "Shell script that uses `config.env` and helps to "
   },
-  "booldog:sed:vscode-snippet-json": {
-    "prefix": "booldog:sed:vscode-snippet-json",
+  "booldog:sed-vscode-snippet-json": {
+    "scope":"shellscript",
+    "prefix": "booldog:sed-vscode-snippet-json",
     "body": [
-      "sed -e 's=\\\\\\\\=\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\=g' -e 's=\"=\\\\\\\\\"=g' -e 's=[\\$]=\\\\\\\\\\\\\\\\\\$=g' -e 's=^\\\\(.*\\\\)\\$=\"\\\\1\",=g' ${1:../edXMicrosoftCV/docker/create-devenv.sh}"
+      "[ ! -f \"./sed-json-snippet\" ] && { touch \"./sed-json-snippet\"; } ; sed -e 's=\\\\\\\\=\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\=g' -e 's=\"=\\\\\\\\\"=g' -e 's=[\\$]=\\\\\\\\\\\\\\\\\\$=g' -e 's=^\\\\(.*\\\\)\\$=\"\\\\1\",=g' \"./sed-json-snippet\" >> \"./.vscode/snippets/shellscript.json\""
     ],
     "description": "Sed command that prepare `file` for `vscode` snippet `json`"
+  },
+  "booldog:check-executable-exists": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-executable-exists",
+    "body": [
+      "function check_executable_exists() {",
+      "  command -v \"\\$1\" > /dev/null 2>&1",
+      "}"
+    ],
+    "description": "Shell function to check executable existence"
+  },
+  "booldog:call-check-executable-exists": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-check-executable-exists",
+    "body": [
+      "if check_executable_exists ${1:polybar}; then",
+      "    echo 'EXISTS'",
+      "fi"
+    ],
+    "description": "Shell function to check executable existence"
+  },
+  "booldog:user-input-options": {
+    "scope":"shellscript",
+    "prefix": "booldog:user-input-options",
+    "body": [
+      "function user_input_options() {",
+      "  local __question=\\$1",
+      "  local -a __options=(\"\\${!2}\")",
+      "  local __resultvar=\\$3",
+      "",
+      "  local __text=\\$(echo -e \"\\${__question}\")",
+      "  PS3=\"\\$__text\"",
+      "  select opt in \"\\${__options[@]}\"",
+      "  do    ",
+      "    local __exists=0 ; local __index=\\$(expr \\$REPLY - 1) ; \\\\",
+      "      [ \\${__options[\\$__index]+abc} ] && __exists=1 || __exists=0",
+      "    eval \\$__resultvar=\"'\\$opt'\"    ",
+      "    [ \\$__exists -eq 1 ] && break || echo \"invalid option \\$REPLY\"",
+      "  done",
+      "}"
+    ],
+    "description": "Shell function that prompts user selection of option"
+  },
+  "booldog:call-user-input-options": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-user-input-options",
+    "body": [
+      "local ${1:res}",
+      "local ${2:options}=(\"Option 1\" \"Option 2\" \"Option 3\" \"Quit\")  ",
+      "user_input_options '${3:Please enter your choice}: ' ${2:options}[@] ${1:res}",
+      "echo \\$${1:res}"
+    ],
+    "description": "Shell expression that calls `booldog:user-input-options` function"
+  },
+  "booldog:expr-case": {
+    "scope":"shellscript",
+    "prefix": "booldog:expr-case",
+    "body": [
+      "case \\$${1:VARIABLE} in",
+      "  ubuntu)",
+      "    echo \"UBUNTU\"",
+      "    ;;",
+      "  centos|rhel)",
+      "    echo \"CENTOS OR RHEL\"",
+      "    ;;",
+      "  windows)",
+      "    echo \"WINDOWS\"",
+      "    ;; ",
+      "  *)",
+      "    echo \"UNKNOWN\"",
+      "    ;;",
+      "esac"
+    ],
+    "description": "Shell `case` expression skeleton"
+  },
+  "booldog:os-package-manager": {
+    "scope":"shellscript",
+    "prefix": "os-package-manager",
+    "body": [
+      "function find_os_package_manager() {",
+      "  local __package_manager=\\$1",
+      "  local __package_manager_install=\\$2",
+      "",
+      "  local __pkg_manager=",
+      "  local __pkg_manager_inst=",
+      "",
+      "  while true",
+      "  do  ",
+      "    local __pkg_manager=pacman ; \\${__pkg_manager} --version > /dev/null 2>&1 \\\\",
+      "      || __pkg_manager=",
+      "    [ -z \"\\${__pkg_manager}\" ] || break",
+      "",
+      "    local __pkg_manager=apt-get ; \\${__pkg_manager} --version > /dev/null 2>&1 \\\\",
+      "      || __pkg_manager=",
+      "    [ -z \"\\${__pkg_manager}\" ] || break",
+      "    ",
+      "    break",
+      "  done",
+      "",
+      "  eval \\$__package_manager=\"'\\$__pkg_manager'\"",
+      "  eval \\$__package_manager_install=\"'\\$__pkg_manager_inst'\"",
+      "",
+      "  [ -z \"\\${__pkg_manager}\" ] && return",
+      "",
+      "  case \\$__pkg_manager in",
+      "  pacman)",
+      "    __pkg_manager_inst=\\${__pkg_manager}\\\\ -S",
+      "    ;;",
+      "  apt-get|apt)",
+      "    __pkg_manager_inst=\\${__pkg_manager}\\\\ install",
+      "    ;;",
+      "  *)",
+      "    echo \"\"",
+      "    ;;",
+      "  esac",
+      "  eval \\$__package_manager_install=\"'\\$__pkg_manager_inst'\"",
+      "}"
+    ],
+    "description": "Shell function that finds OS package manager(`apt-get`, `pacman`, `dnf`)"
+  },
+  "booldog:user-input-autocompletion": {
+    "scope":"shellscript",
+    "prefix": "booldog:user-input-autocompletion",
+    "body": [
+      "function user_input_autocompletion() {",
+      "  local __question=\\$1",
+      "  local __resultvar=\\$2",
+      "",
+      "  local __text=\\$(echo -e \"\\${__question}\")",
+      "  local __user_input=",
+      "  while true",
+      "  do",
+      "    read -e -p \"\\${__text}\" __user_input",
+      "    [ -z \"\\${__user_input}\" ] || break",
+      "  done",
+      "  eval \\$__resultvar=\"'\\$__user_input'\"",
+      "}"
+    ],
+    "description": "Shell function that finds OS package manager(`apt-get`, `pacman`, `dnf`)"
+  },
+  "booldog:call-user-input-autocompletion": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-user-input-autocompletion",
+    "body": [
+      "local ${2:mydir}=",
+      "user_input_autocompletion '${1:Enter directory: }' ${2:mydir}"
+    ],
+    "description": "Shell expression that calls `booldog:user-input-autocompletion` function"
+  },
+  "booldog:io-read-file-line-by-line": {
+    "scope":"shellscript",
+    "prefix": "booldog:io-read-file-line-by-line",
+    "body": [
+      "local ${1:__line}=",
+      "local ${2:__filename}=\"${3:/tmp/test}\"",
+      "while IFS= read -r ${1:__line} || [ -n \"\\$${1:__line}\" ]",
+      "do",
+      "  echo \"\\$${1:__line}\"",
+      "done < \"\\$${2:__filename}\""
+    ],
+    "description": "Shell expression that reads file line by line"
+  },
+  "booldog:user-input-confirmation-default-yes": {
+    "scope":"shellscript",
+    "prefix": "booldog:user-input-confirmation-default-yes",
+    "body": [
+      "function user_input_confirmation_default_yes() {",
+      "  local __question=\\$1",
+      "",
+      "  local __text=\\$(echo -e \"\\${__question} (Y/n)\")",
+      "  read -p \"\\${__text}\" -n 1 -r",
+      "  echo",
+      "  [[ ! \\$REPLY =~ ^[Nn]\\$ ]] && return 0 || return 1",
+      "}"
+    ],
+    "description": "Shell function that is waiting for user confirmation Yy/Nn(default is Yy)"
+  },
+  "booldog:user-input-confirmation-default-no": {
+    "scope":"shellscript",
+    "prefix": "booldog:user-input-confirmation-default-no",
+    "body": [
+      "function user_input_confirmation_default_no() {",
+      "  local __question=\\$1",
+      "",
+      "  local __text=\\$(echo -e \"\\${__question} (y/N)\")",
+      "  read -p \"\\${__text}\" -n 1 -r",
+      "  echo",
+      "  [[ ! \\$REPLY =~ ^[Yy]\\$ ]] && return 1 || return 0",
+      "}"
+    ],
+    "description": "Shell function that is waiting for user confirmation Yy/Nn(default is Nn)"
+  },
+  "booldog:os-linux-distributive-name": {
+    "scope":"shellscript",
+    "prefix": "booldog:os-linux-distributive-name",
+    "body": [
+      "local __distr_name=",
+      "__distr_name=\\$(. /etc/os-release;echo \\$ID) # get distributive name"
+    ],
+    "description": "Shell expression that retrieves Linux distributive name"
+  },
+  "booldog:version-greater-than": {
+    "scope":"shellscript",
+    "prefix": "booldog:version-greater-than",
+    "body": [
+      "function is_version_greater_than () {",
+      "    [ \"\\$1\" = \"\\$2\" ] && return 1 # equal",
+      "    local IFS=.",
+      "    local i ver1=(\\$1) ver2=(\\$2)",
+      "    for ((i=\\${#ver1[@]}; i<\\${#ver2[@]}; i++))",
+      "    do",
+      "        ver1[i]=0",
+      "    done",
+      "    for ((i=0; i<\\${#ver1[@]}; i++))",
+      "    do",
+      "        [ -z \"\\${ver2[i]}\" ] && ver2[i]=0",
+      "        [ \\${ver1[i]} -gt \\${ver2[i]} ] && return 0 # greater",
+      "        [ \\${ver1[i]} -lt \\${ver2[i]} ] && return 1 # less",
+      "    done",
+      "    return 1 # equal",
+      "}"
+    ],
+    "description": "Shell function that check if first version string is greater than second one"
+  },
+  "booldog:call-version-greater-than": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-version-greater-than",
+    "body": [
+      "is_version_greater_than \"14.04\" \"14.04.1\" && echo 'YES' || echo 'NOT'"
+    ],
+    "description": "Shell expression that calls `booldog:version-greater-than` function"
+  },
+  "booldog:version-less-than": {
+    "scope":"shellscript",
+    "prefix": "booldog:version-less-than",
+    "body": [
+      "function is_version_less_than () {",
+      "    [ \"\\$1\" = \"\\$2\" ] && return 1 # equal",
+      "    local IFS=.",
+      "    local i ver1=(\\$1) ver2=(\\$2)",
+      "    for ((i=\\${#ver1[@]}; i<\\${#ver2[@]}; i++))",
+      "    do",
+      "        ver1[i]=0",
+      "    done",
+      "    for ((i=0; i<\\${#ver1[@]}; i++))",
+      "    do",
+      "        [ -z \"\\${ver2[i]}\" ] && ver2[i]=0",
+      "        [ \\${ver1[i]} -gt \\${ver2[i]} ] && return 1 # greater",
+      "        [ \\${ver1[i]} -lt \\${ver2[i]} ] && return 0 # less",
+      "    done",
+      "    return 1 # equal",
+      "}"
+    ],
+    "description": "Shell function that check if first version string is less than second one"
+  },
+  "booldog:call-version-less-than": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-version-less-than",
+    "body": [
+      "is_version_less_than \"14.04\" \"14.04.1\" && echo 'YES' || echo 'NOT'"
+    ],
+    "description": "Shell expression that calls `booldog:version-less-than` function"
+  },
+  "booldog:version-equals-to": {
+    "scope":"shellscript",
+    "prefix": "booldog:version-equals-to",
+    "body": [
+      "function is_version_equals_to () {",
+      "    [ \"\\$1\" = \"\\$2\" ] && return 0 # equals",
+      "    local IFS=.",
+      "    local i ver1=(\\$1) ver2=(\\$2)",
+      "    for ((i=\\${#ver1[@]}; i<\\${#ver2[@]}; i++))",
+      "    do",
+      "        ver1[i]=0",
+      "    done",
+      "    for ((i=0; i<\\${#ver1[@]}; i++))",
+      "    do",
+      "        [ -z \"\\${ver2[i]}\" ] && ver2[i]=0",
+      "        [ \\${ver1[i]} -gt \\${ver2[i]} ] && return 1 # greater",
+      "        [ \\${ver1[i]} -lt \\${ver2[i]} ] && return 1 # less",
+      "    done",
+      "    return 0 # equals",
+      "}"
+    ],
+    "description": "Shell function that check if first version string equals to second one"
+  },
+  "booldog:call-version-equals-to": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-version-equals-to",
+    "body": [
+      "is_version_equals_to \"14.04\" \"14.04.1\" && echo 'YES' || echo 'NOT'"
+    ],
+    "description": "Shell expression that calls `booldog:version-equals-to` function"
+  },
+  "booldog:check-existence-in-array": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-existence-in-array",
+    "body": [
+      "function check_existence_in_array() {",
+      "  local __key=\\$1",
+      "  local -a __array=(\"\\${!2}\")",
+      "",
+      "  local i",
+      "  for ((i=0; i<\\${#__array[@]}; i++))",
+      "  do",
+      "    [ \"\\${__array[i]}\" = \"\\$__key\" ] && return 0",
+      "  done",
+      "  return 1",
+      "}"
+    ],
+    "description": "Shell function that checks element existence in array"
+  },
+  "booldog:call-check-existence-in-array": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-check-existence-in-array",
+    "body": [
+      "local supported_distros=( \"ubuntu\" \"debian\" )",
+      "local __distr_name=manjaro",
+      "check_existence_in_array \"\\$__distr_name\" supported_distros[@] \\\\",
+      "  && echo 'EXISTS' || echo 'DOES NOT EXIST'"
+    ],
+    "description": "Shell expression that calls `booldog:check-existence-in-array` function"
+  },
+  "booldog:call-user-input-confirmation-default-yes": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-user-input-confirmation-default-yes",
+    "body": [
+      "user_input_confirmation_default_yes \\\\",
+      "  '${1:Are you sure you want to install and setup X2Goserver?}' \\\\",
+      "  && echo 'YES' || echo 'NO'"
+    ],
+    "description": "Shell expression that calls `booldog:call-user-input-confirmation-default-yes` function"
+  },
+  "booldog:call-user-input-confirmation-default-no": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-user-input-confirmation-default-no",
+    "body": [
+      "user_input_confirmation_default_no \\\\",
+      "  '${1:Are you sure you want to install and setup X2Goserver?}' \\\\",
+      "  && echo 'YES' || echo 'NO'"
+    ],
+    "description": "Shell expression that calls `booldog:call-user-input-confirmation-default-no` function"
+  },
+  "booldog:expr-for-loop": {
+    "scope":"shellscript",
+    "prefix": "booldog:expr-for-loop",
+    "body": [
+      "local i __array=( \"ubuntu\" \"debian\" )",
+      "for ((i=0; i<\\${#__array[@]}; i++))",
+      "do",
+      "    echo \"item \\${i}=\\${__array[i]}\"",
+      "done"
+    ],
+    "description": "Shell C-like `for` expression skeleton"
+  },
+  "booldog:path-get-temp-directory": {
+    "scope":"shellscript",
+    "prefix": "booldog:path-get-temp-directory",
+    "body": [
+      "local __temp_dir=\\$(dirname \\$(mktemp -u))"
+    ],
+    "description": "Shell expression to get temporary directory path(`/tmp`, `temp`, etc.)"
+  },
+  "booldog:check-variable-existence": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-variable-existence",
+    "body": [
+      "function check_variable_existence() {",
+      "  [ -z \\${1+abc} ] && return 1 || return 0",
+      "}"
+    ],
+    "description": "Shell function that checks variable existence. Usage: check_variable_existence $1 && echo 'EXISTS' || echo 'DOES NOT EXIST'"
+  },
+  "booldog:check-function-existence": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-function-existence",
+    "body": [
+      "[ \"\\$(type -t ${1:check_python_existence})\" = function ] || {",
+      "  >&2 echo -e 'Shell function '\\${redbold}'`${1:check_python_existence}`'\\${red}' does not exist.';",
+      "  }"
+    ],
+    "description": "Shell expression that checks function existence"
+  },
+  "booldog:network-download-file": {
+    "scope":"shellscript",
+    "prefix": "booldog:network-download-file",
+    "body": [
+      "function network_download_file() {",
+      "  [ \"\\$(type -t check_variable_existence)\" = function ] || {",
+      "    >&2 echo -e 'Shell function '\\${redbold}'`check_variable_existence`'\\${red}' does not exist.';",
+      "    }",
+      "",
+      "  local red='\\\\e[0;31m'",
+      "  local redbold='\\\\e[1;31m'",
+      "",
+      "  check_variable_existence \\$1 \\\\",
+      "    || { ",
+      "      >&2 echo -e 'Please pass '\\${redbold}'`url`'\\${red}' as first parameter of the '\\${redbold}'`network_download_file`'\\${red}' function.';",
+      "      return 1;",
+      "      }",
+      "",
+      "  local __url=\\${1}  ",
+      "",
+      "  check_variable_existence \\$2 \\\\",
+      "    && local __output_file=\\${2} \\\\",
+      "    || local __output_file=\\$(basename \"\\${__url}\")",
+      "",
+      "  check_variable_existence \\$3 \\\\",
+      "    && local __check_ssl_cert=\\${3} \\\\",
+      "    || local __check_ssl_cert=1",
+      "  ",
+      "  local __output_file=\\$(realpath \"\\${__output_file}\")",
+      "",
+      "  local __download_command=",
+      "  while true",
+      "  do",
+      "    command -v curl > /dev/null 2>&1 \\\\",
+      "      && { __download_command=curl ; break; }",
+      "",
+      "    command -v wget > /dev/null 2>&1 \\\\",
+      "      && { __download_command=wget ; break; }",
+      "    break",
+      "  done",
+      "",
+      "  [ -d \"\\${__output_file}\" ] \\\\",
+      "    && __output_file=\\${__output_file}'/'\\$(basename \"\\${__url}\")",
+      "",
+      "  case \\$__download_command in",
+      "    curl)",
+      "      [ \\${__check_ssl_cert} -eq 1 ] \\\\",
+      "        && __download_command=curl\\\\ \\${__url}\\\\ -o\\\\ \"\\${__output_file}\" \\\\",
+      "        || __download_command=curl\\\\ -k\\\\ \\${__url}\\\\ -o\\\\ \"\\${__output_file}\"",
+      "      ;;",
+      "    wget)",
+      "      [ \\${__check_ssl_cert} -eq 1 ] \\\\",
+      "        && __download_command=wget\\\\ \\${__url}\\\\ -O\\\\ \"\\${__output_file}\" \\\\",
+      "        || __download_command=wget\\\\ --no-check-certificate\\\\ \\${__url}\\\\ -O\\\\ \"\\${__output_file}\"",
+      "      ;; ",
+      "    *)",
+      "      >&2 echo -e \"Cannot find \\${redbold}curl\\${red} or \\${redbold}wget\\${red}. Please install \\${redbold}curl\\${red} or \\${redbold}wget\\${red} and try again.\";",
+      "      return 1;",
+      "      ;;",
+      "  esac",
+      "",
+      "  \\${__download_command} 2>&1 >/dev/tty || return 1",
+      "",
+      "  return 0",
+      "}"
+    ],
+    "description": "Shell function that downloads file via `curl` or `wget`"
+  },
+  "booldog:call-network-download-file": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-network-download-file",
+    "body": [
+      "local __output=${1:\\$(dirname \\$(mktemp -u))'/get-pip.py'}",
+      "local __url=${2:https://bootstrap.pypa.io/get-pip.py}",
+      "local __funcerror=",
+      "__funcerror=\\$(network_download_file \\${__url} \"\\${__output}\" 2>&1 >/dev/tty) || {",
+      "    >&2 echo -e \"\\${__funcerror}\";",
+      "  }"
+    ],
+    "description": "Shell expression that calls `network-download-file` function"
+  },
+  "booldog:check-python-existence": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-python-existence",
+    "body": [
+      "function check_python_existence() {",
+      "  while true",
+      "  do",
+      "    [ ! -z \"\\$1\" ] && { local __python_ex=\\${1}; break; }",
+      "",
+      "    local __python_ex=python3",
+      "",
+      "    command -v \"\\${__python_ex}\" > /dev/null 2>&1 \\\\",
+      "      || __python_ex=python    ",
+      "    break",
+      "  done",
+      "  command -v \"\\${__python_ex}\" > /dev/null 2>&1 \\\\",
+      "    || { ",
+      "      >&2 echo -e \"Cannot find \\${redbold}Python\\${red}. Please install \\${redbold}Python\\${red} and try again.\";",
+      "      return 1;",
+      "      }",
+      "  echo \"\\${__python_ex}\"",
+      "  return 0",
+      "}"
+    ],
+    "description": "Shell function that checks `python` existence"
+  },
+  "booldog:python-install-pip": {
+    "scope":"shellscript",
+    "prefix": "booldog:python-install-pip",
+    "body": [
+      "function python_install_pip() {",
+      "  [ \"\\$(type -t check_python_existence)\" = function ] || {",
+      "    >&2 echo -e 'Shell function '\\${redbold}'`check_python_existence`'\\${red}' does not exist.';",
+      "    }",
+      "  ",
+      "  [ \"\\$(type -t network_download_file)\" = function ] || {",
+      "    >&2 echo -e 'Shell function '\\${redbold}'`network_download_file`'\\${red}' does not exist.';",
+      "    }",
+      "",
+      "  local __python_pip=",
+      "",
+      "  __python_pip=\\$(check_python_existence \\$1) || {",
+      "    >&2 echo -e \"\\${__python_pip}\";",
+      "    return 1;",
+      "    }",
+      "",
+      "  \"\\${__python_pip}\" -m pip --version > /dev/null 2>&1 && return 0",
+      "",
+      "  local __get_pip_path=\\$(dirname \\$(mktemp -u))'/get-pip.py'",
+      "  local __url=https://bootstrap.pypa.io/get-pip.py",
+      "  local __funcerror=",
+      "  __funcerror=\\$(network_download_file \\${__url} \"\\${__get_pip_path}\" 2>&1 >/dev/tty) || {",
+      "      >&2 echo -e \"\\${__funcerror}\";",
+      "      return 1;",
+      "    }",
+      "",
+      "  \"\\${__python_pip}\" \"\\${__get_pip_path}\" --user 2>&1 >/dev/tty \\\\",
+      "    && return 0 \\\\",
+      "    || return 1",
+      "}"
+    ],
+    "description": "Shell function that installs `python` `pip` executable via `get-pip.py`. Requirements: function `check_python_existence`, function `network_download_file`"
+  },
+  "booldog:python-install-virtualenv": {
+    "scope":"shellscript",
+    "prefix": "booldog:python-install-virtualenv",
+    "body": [
+      "function python_install_virtualenv() {",
+      "  local red='\\\\e[0;31m'",
+      "  local redbold='\\\\e[1;31m'",
+      "",
+      "  [ \"\\$(type -t check_python_existence)\" = function ] || {",
+      "      >&2 echo -e 'Shell function '\\${redbold}'`check_python_existence`'\\${red}' does not exist.';",
+      "      return 1;",
+      "    }",
+      "  ",
+      "  [ \"\\$(type -t python_install_pip)\" = function ] || {",
+      "      >&2 echo -e 'Shell function '\\${redbold}'`python_install_pip`'\\${red}' does not exist.';",
+      "      return 1;",
+      "    }",
+      "",
+      "  local __python=",
+      "  __python=\\$(check_python_existence \\$1) || {",
+      "      >&2 echo -e \"\\${__python}\";",
+      "      return 1;",
+      "    }",
+      "",
+      "  while true",
+      "  do",
+      "    \"\\${__python}\" -m virtualenv --version > /dev/null 2>&1 && break",
+      "",
+      "    local __funcerror=",
+      "    __funcerror=\\$(python_install_pip \"\\${__python}\" 2>&1 >/dev/tty) || {    ",
+      "        >&2 echo -e \"\\${__funcerror}\";",
+      "        return 1;",
+      "      }",
+      "",
+      "    \"\\${__python}\" -m pip install --user virtualenv 2>&1 >/dev/tty || return 1",
+      "    ",
+      "    break",
+      "  done",
+      "  return 0",
+      "}"
+    ],
+    "description": "Shell function that installs `python` `virtualenv` script. Requirements: function `check_python_existence`, function `python_install_pip`"
+  },
+  "booldog:call-check-python-existence": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-check-python-existence",
+    "body": [
+      "local __python_pip=",
+      "__python_pip=\\$(check_python_existence \\$1) || {",
+      "    >&2 echo -e \"\\${__python_pip}\";",
+      "  }"
+    ],
+    "description": "Shell expression that calls `booldog:check-python-existence` function"
+  },
+  "booldog:call-python-install-pip": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-python-install-pip",
+    "body": [
+      "local __python=python3",
+      "local __funcerror=",
+      "__funcerror=\\$(python_install_pip \"\\${__python}\" 2>&1 >/dev/tty) || {    ",
+      "    >&2 echo -e \"\\${__funcerror}\";",
+      "  }"
+    ],
+    "description": "Shell expression that calls `booldog:python-install-pip` function"
+  },
+  "booldog:call-python-install-virtualenv": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-python-install-virtualenv",
+    "body": [
+      "local __python=python3",
+      "local __funcerror=",
+      "__funcerror=\\$(python_install_virtualenv \"\\${__python}\" 2>&1 >/dev/tty) || {    ",
+      "    >&2 echo -e \"\\${__funcerror}\";",
+      "  }"
+    ],
+    "description": "Shell expression that calls `booldog:python-install-virtualenv` function"
+  },
+  "booldog:call-check-variable-existence": {
+    "scope":"shellscript",
+    "prefix": "booldog:call-check-variable-existence",
+    "body": [
+      "check_variable_existence \\$1 || { ",
+      "    >&2 echo -e 'Please pass '\\${redbold}'`url`'\\${red}' as first parameter of the '\\${redbold}'`network_download_file`'\\${red}' function.';",
+      "  }"
+    ],
+    "description": "Shell expression that calls `booldog:check-variable-existence` function"
+  },
+  "booldog:check-if-variable-is-an-array": {
+    "scope":"shellscript",
+    "prefix": "booldog:check-if-variable-is-an-array",
+    "body": [
+      "declare -p variable-name 2> /dev/null | grep -q 'declare \\\\-a' && {",
+      "  echo 'ARRAY'",
+      "} || {",
+      "  echo 'NOT ARRAY'",
+      "}"
+    ],
+    "description": "Shell expression to check if variable is an array variable"
+  },
+  "booldog:utils-get-script-name-and-directory": {
+    "scope":"shellscript",
+    "prefix": "booldog:utils-get-script-name-and-directory",
+    "body": [
+      "[ \"\\$(type -t get_script_name)\" = function ] || {",
+        "  >&2 echo -e 'Shell function '\\${redbold}'`get_script_name`'\\${red}' does not exist.'",
+        "  return 1",
+        "}",
+        "[ \"\\$(type -t get_script_dir)\" = function ] || {",
+        "  >&2 echo -e 'Shell function '\\${redbold}'`get_script_dir`'\\${red}' does not exist.'",
+        "  return 1",
+        "}",
+        "local __script_name= __script_dir=",
+        "__script_name=\\$(get_script_name)",
+        "__script_dir=\\$(get_script_dir)",
+    ],
+    "description": "Shell expression to get executing script basename and directory. Requirements: function `get_script_name`(snippet `booldog:utils-get-script-name`), function `get_script_dir`(snippet `booldog:utils-get-script-directory`)"
+  },
+  "booldog:utils-get-script-name": {
+    "scope":"shellscript",
+    "prefix": "booldog:utils-get-script-name",
+    "body": [
+      "function get_script_name() {",
+      "  [ ! -z \"\\${BASH_SOURCE[0]}\" ] && {",
+      "    echo \\$(basename \"\\${BASH_SOURCE[0]}\")",
+      "    return 0",
+      "  }",
+      "  echo \\$(basename \"\\$0\")",
+      "  return 0",
+      "}"
+    ],
+    "description": "Shell function to get executing script basename"
+  },
+  "booldog:utils-get-script-directory": {
+    "scope":"shellscript",
+    "prefix": "booldog:utils-get-script-directory",
+    "body": [
+      "function get_script_dir() {",
+      "  [ -z \"\\${BASH_SOURCE[0]}\" ] && {",
+      "    >&2 echo 'BASH_SOURCE[0] is empty'",
+      "    return 1",
+      "  }",
+      "  local __old_dir=\\$(pwd)",
+      "  local __source=\"\\${BASH_SOURCE[0]}\" __dir=",
+      "  while [ -h \"\\${__source}\" ]",
+      "  do",
+      "    __dir=\\$(dirname \"\\${__source}\")",
+      "    __dir=\"\\$(cd -P \"\\${__dir}\" >/dev/null 2>&1 && pwd)\"",
+      "    __source=\"\\$(readlink \"\\$__source\")\"",
+      "    [[ \\${__source} != /* ]] && {",
+      "      __source=\"\\$(readlink \"\\$__source\")\"",
+      "    }",
+      "  done",
+      "  __dir=\\$(dirname \"\\${__source}\")",
+      "  __dir=\"\\$(cd -P \"\\${__dir}\" >/dev/null 2>&1 && pwd)\"",
+      "  cd \"\\${__old_dir}\"",
+      "  echo \\${__dir}",
+      "  return 0",
+      "}"
+    ],
+    "description": "Shell function to get executing script directory"
   }
 }

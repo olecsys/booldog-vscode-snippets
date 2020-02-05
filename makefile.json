@@ -1,5 +1,6 @@
 {
     "booldog:makefile:docker-skeleton": {
+      "scope":"makefile",
       "prefix": "booldog:docker:makefile",
       "body": [
         "MAKEFILE_PATH := \\$(abspath \\$(lastword $(MAKEFILE_LIST)))",
@@ -31,6 +32,7 @@
       "description": "Makefile is implementing different Docker commands"
     },
     "booldog:makefile:check-path-exists": {
+      "scope":"makefile",
       "prefix": "booldog:makefile:check-file-exists",
       "body": [
         "ifneq (\"\\$(wildcard \\$(${1:VARNAME}))\",\"\")",
@@ -42,7 +44,8 @@
       "description": "Check path existing"
     },
     "booldog:makefile:check-variable-exists": {
-      "prefix": "booldog:makefile:check-variable-exists",
+      "scope":"makefile",
+      "prefix": "booldog:makefile:check-variable-exists",      
       "body": [
         "ifndef ${1:VARNAME}",
         "${2:\\$(info variable does not exist)}",
@@ -51,6 +54,7 @@
       "description": "Check variable existing"
     },    
     "booldog:makefile:path": {
+      "scope":"makefile",
       "prefix": "booldog:makefile:path",
       "body": [
         "MAKEFILE_PATH := \\$(abspath \\$(lastword \\$(MAKEFILE_LIST)))",
@@ -59,6 +63,7 @@
       "description": "Makefile path variable"
     },
     "booldog:makefile:echo": {
+      "scope":"makefile",
       "prefix": "booldog:makefile:path",
       "body": [
         "$(info ${1:MESSAGE})"
@@ -66,6 +71,7 @@
       "description": "Print message on the terminal"
     },
     "booldog:makefile:changeable-variable": {
+      "scope":"makefile",
       "prefix": "booldog:makefile:changeable-variable",
       "body": [
         "# You can change the default value of ${1:VARNAME} with `make ${1:VARNAME}=\"new-value\"`",

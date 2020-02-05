@@ -1,6 +1,7 @@
 {
-  "booldog:vscode:tasks:skeleton": {
-    "prefix": "booldog:vscode:tasks:skeleton",
+  "booldog:vscode-tasks-skeleton": {
+    "scope": "jsonc",
+    "prefix": "booldog:vscode-tasks-skeleton",
     "body": [
       "{",
       "// See https://go.microsoft.com/fwlink/?LinkId=733558",
@@ -11,5 +12,32 @@
       "}"
     ],
     "description": "VSCode tasks.json skeleton"
+  },
+  "booldog:vscode-task-skeleton": {
+    "scope": "jsonc,json",
+    "prefix": "booldog:vscode-task-skeleton",
+    "body": [
+      "{",
+      "    \"label\": \"${1:Task Name}\",",
+      "    \"type\": \"shell\",",
+      "    \"options\": {",
+      "        \"env\": {",
+      "        }",
+      "    },",
+      "    \"command\": \"echo \\\\\"\\${workspaceRoot}\\\\\"\",",
+      "    \"windows\": {",
+      "        \"command\": \"echo \\\\\"\\${workspaceRoot}\\\\\"\",",
+      "    },",
+      "    \"args\": [],",
+      "    \"group\": {",
+      "        \"kind\": \"build\",",
+      "        \"isDefault\": true",
+      "    },",
+      "    \"problemMatcher\": [",
+      "        \"\\$gcc\"",
+      "    ]",
+      "}"
+    ],
+    "description": "VSCode `tasks.json` one task skeleton"
   }
 }
