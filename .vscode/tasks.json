@@ -16,6 +16,33 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "sed file 'sed-json-snippet' to VSCode snippet json",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceRoot}",
+        "env": {}
+      },
+      "command": "[ ! -f \"./sed-json-snippet\" ] && { touch \"./sed-json-snippet\"; } ; sed -e 's=\\\\=\\\\\\\\\\\\\\\\=g' -e 's=\"=\\\\\"=g' -e 's=[$]=\\\\\\\\$=g' -e 's=^\\(.*\\)$=\"\\1\",=g' \"./sed-json-snippet\" >> \"./${input:pickSnippetFile}\"",
+      "args": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }    
+  ]
+  ,"inputs": [
+    {
+      "id":"pickSnippetFile",
+      "type": "command",
+      "description": "Please select snippet type:",
+      "command": "shellCommand.execute",
+      "args":{
+        "cwd": "${workspaceFolder}",
+        "command":"find . -name '*.json' -maxdepth 1 -type f -printf \"%f\\n\"|sort"
+      }
     }
   ]
 }
