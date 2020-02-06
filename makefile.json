@@ -60,7 +60,7 @@
       "MAKEFILE_PATH := \\$(abspath \\$(lastword \\$(MAKEFILE_LIST)))",
       "MAKEFILE_DIR := \\$(patsubst %/,%,\\$(dir \\$(MAKEFILE_PATH)))"
     ],
-    "description": "Makefile path and directory path variables"
+    "description": "Get makefile path and directory path variables"
   },
   "booldog:makefile:echo": {
     "scope": "makefile",
@@ -83,7 +83,7 @@
     "scope": "makefile",
     "prefix": "booldog:shell-output-to-variable",
     "body": [
-      "# Forum discussion https://stackoverflow.com/questions/2019989/how-to-assign-the-output-of-a-command-to-a-makefile-variable",
+      "### Forum discussion https://stackoverflow.com/questions/2019989/how-to-assign-the-output-of-a-command-to-a-makefile-variable",
       "MAKEFILE_HOME_DIR = \\${HOME}",
       "${1:VARNAME} := \\$(shell ${2:find \"\\$(MAKEFILE_HOME_DIR)\" -mindepth 1 -maxdepth 1 -type d -printf \"%f\\\\\\\\n\"})"
     ],
@@ -111,5 +111,14 @@
       "${2:VARNAME} = \\${${1:HOME}}"
     ],
     "description": "Export environment variable to Makefile scope"
+  },
+  "booldog:cwd": {
+    "scope": "makefile",
+    "prefix": "booldog:cwd",
+    "body": [
+      "### Forum discussion https://stackoverflow.com/questions/18136918/how-to-get-current-relative-directory-of-your-makefile",
+      "${1:MAKEFILE_CWD} = \\$(shell pwd)"
+    ],
+    "description": "Get current working directory"
   }
 }
