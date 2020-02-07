@@ -1503,5 +1503,16 @@
       "}"
     ],
     "description": "Shell function to get executing script directory"
+  },
+  "booldog:env:export-from-env-file": {
+    "scope": "shellscript",
+    "prefix": "booldog:env:export-from-env-file",
+    "body": [
+      "local __config_env_path=\"${1:\\${script_dir}/../config.env}\"",
+      "if [ -f \"\\${__config_env_path}\" ]; then",
+      "    eval \\$(cat \"\\${__config_env_path}\" | sed 's/\\\\s/\\\\\\\\ /g' | sed 's/^/export /')",
+      "fi"
+    ],
+    "description": "Export variables from .env file to the shell"
   }
 }
