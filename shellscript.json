@@ -1530,5 +1530,36 @@
       "}"
     ],
     "description": "Export variables from .env file to the shell"
+  },
+  "booldog:messages:error-echo": {
+    "scope": "shellscript",
+    "prefix": "booldog:messages:error-echo",
+    "body": [
+      ">&2 echo -e \\${nocolor}'${1:some error message.}'\\${__see_help_message}"
+    ],
+    "description": "Print error message in the shell"
+  },
+  "booldog:messages:help": {
+    "scope": "shellscript",
+    "prefix": "booldog:messages:help",
+    "body": [
+      "local __script_name=",
+      "__script_name=\\$(get_script_name)",
+      "",
+      "local nocolor='\\\\e[0m'",
+      "local nocolorbold='\\\\e[1m'",
+      "",
+      "local __command=\\$1",
+      "local __see_help_message='\\\\n\\\\nSee `'\\${nocolorbold}\\${__script_name}\\${nocolor}' help '\\${__command}'`.'"
+    ],
+    "description": "Fill local variable `__see_help_message` with script help message"
+  },
+  "booldog:messages:bold-text": {
+    "scope": "shellscript",
+    "prefix": "booldog:messages:bold-text",
+    "body": [
+      "'\\${nocolorbold}'__pkg_src_git_dir'\\${nocolor}'"
+    ],
+    "description": "Make text bold in echo command if it is possible"
   }
 }
