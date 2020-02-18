@@ -9,7 +9,7 @@
       "options": {
         "env": {}
       },
-      "command": "\"${workspaceRoot}/apply.sh\"",
+      "command": "\"${workspaceRoot}/.vscode/apply.sh\"",
       "args": [],
       "group": {
         "kind": "build",
