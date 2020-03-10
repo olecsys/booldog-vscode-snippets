@@ -57,15 +57,17 @@ function main() {
   do  
     local vscode_user_global_snippets_path="${HOME}/.config/Code/User/snippets"
     [ -d "$vscode_user_global_snippets_path" ] || {
-      local __funcmsg=${redbold}"cannot find VSCode global snippets path ${vscode_user_global_snippets_path} of user ${USER}"
+      __funcmsg=${redbold}"cannot find VSCode global snippets path ${vscode_user_global_snippets_path} of user ${USER}"
       break
     }
     local __repo_dir="${__script_dir}/.."
     __repo_dir=$(realpath "${__repo_dir}")
+
     __funcmsg=$(find "${__repo_dir}" -maxdepth 1 -type f -name '*.json' -printf "%f\n"|xargs -I RR -n1 ${SHELL} -c 'local filename=RR && filename=${filename%.*} && cp "'${__repo_dir}'/$filename.json" "'${vscode_user_global_snippets_path}'/booldog-$filename.code-snippets"' 2>&1) || {
       __funcmsg=${redbold}${__funcmsg}
       break
     }
+    echo 
     __funcresult=0
     break
   done  
