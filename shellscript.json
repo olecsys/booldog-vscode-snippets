@@ -1510,7 +1510,7 @@
     "body": [
       "local __config_env_path=\"${1:\\${script_dir}/../config.env}\"",
       "if [ -f \"\\${__config_env_path}\" ]; then",
-      "    eval \\$(cat \"\\${__config_env_path}\" | sed 's/\\\\s/\\\\\\\\ /g' | sed 's/^/export /')",
+      "  eval \\$(cat \"\\${__config_env_path}\" | sed 's/\\\\s/\\\\\\\\ /g' | sed 's/^/export /')",
       "fi"
     ],
     "description": "Export variables from .env file to the shell"
@@ -1561,5 +1561,50 @@
       "'\\${nocolorbold}'__pkg_src_git_dir'\\${nocolor}'"
     ],
     "description": "Make text bold in echo command if it is possible"
+  },
+  "booldog:functions:make-temp-file": {
+    "scope": "shellscript",
+    "prefix": "booldog:functions:make-temp-file",
+    "body": [
+      "function make_temp_file() {",
+      "  local __temp_path_ref=\\$1",
+      "  local __temp_path=\\$(mktemp -u)",
+      "  touch \"\\${__temp_path}\" || {",
+      "    >&2 echo 'cannot create file `'\\${__temp_path}'`.'",
+      "    return 1",
+      "  }",
+      "  [ \"\\$(type -t trap_add)\" = function ] || {",
+      "    >&2 echo 'Shell function `trap_add` does not exist.';",
+      "    return 1",
+      "  }",
+      "  trap_add 'rm \"'\\${__temp_path}'\"' INT TERM HUP EXIT",
+      "  eval \\$__temp_path_ref=\"'\\${__temp_path}'\"",
+      "  return 0",
+      "}"
+    ],
+    "description": "Function that creates temporary file and ensures that it will be removed at the script exit. Function `trap_add` must be declared"
+  },
+  "booldog:functions:trap-add": {
+    "scope": "shellscript",
+    "prefix": "booldog:functions:trap-add",
+    "body": [
+      "function trap_add() {",
+      "  local __trap_add_cmd=\\$1",
+      "  shift",
+      "  local __trap_add_name=",
+      "  for __trap_add_name in \"\\$@\"; do",
+      "    trap -- \"\\$(",
+      "      extract_trap_cmd() { printf '%s\\\\n' \"\\$3\"; }",
+      "      eval \"extract_trap_cmd \\$(trap -p \"\\${__trap_add_name}\")\"",
+      "      printf '%s\\\\n' \"\\${__trap_add_cmd}\"",
+      "    )\" \"\\${__trap_add_name}\" || {",
+      "      >&2 echo -e 'Unable to add '\\${__trap_add_name}' to trap'",
+      "      return 1",
+      "    }",
+      "  done",
+      "  return 0",
+      "}"
+    ],
+    "description": "Function that add trap script code to trap without clearing of the previous traps"
   }
 }
