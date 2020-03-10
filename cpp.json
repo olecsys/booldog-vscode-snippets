@@ -1,0 +1,11 @@
+{
+    "booldog:C++11:noncopyable": {
+        "scope": "cpp",
+        "prefix": "booldog:C++11:noncopyable",
+        "body": [
+            "${1:A}(const ${1:A}&) = delete;",
+            "${1:A}& operator=(const ${1:A}&) = delete;"
+        ],
+        "description": "C++11 non copyable class/struct"
+    }
+}
